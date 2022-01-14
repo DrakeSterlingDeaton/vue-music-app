@@ -1,0 +1,12 @@
+{
+    "home": {
+      "h1": "Écoutez de la bonne musique!",
+      "songs": "Chansons"
+    },
+    "header": {
+        "displaying": "Affichage site web dans"
+    },
+    "song": {
+        "comment_count": "Sans commentaires | 1 commentaire | {count} commentaires"
+      }
+  }

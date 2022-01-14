@@ -1,0 +1,16 @@
+{
+  "home": {
+    "h1": "Listen to Great Music!",
+    "songs": "Songs"
+  },
+  "header": {
+    "displaying": "Displaying website in"
+  },
+  "song": {
+    "comment_count": "No comments | 1 Comment | {count} Comments"
+  },
+  "register": {
+    "TOS": "Terms of Service",
+    "accept": "I accept the {0}"
+  }
+}

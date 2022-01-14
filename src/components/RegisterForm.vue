@@ -1,7 +1,7 @@
 <template>
     <div>
             <!-- Registration Form -->
-        <div class="text-white text-center font-bold p-5 mb-4" 
+        <div class="text-white text-center font-bold p-5 mb-4"
         v-if="reg_show_alert" :class="reg_alert_variant">
             {{ reg_alert_msg }}
         </div>
@@ -10,7 +10,7 @@
             <!-- Name -->
             <div class="mb-3">
                 <label class="inline-block mb-2">Name</label>
-                <vee-field 
+                <vee-field
                     type="text" name="name"
                     class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
                     placeholder="Enter Name"
@@ -20,7 +20,7 @@
             <!-- Email -->
             <div class="mb-3">
                 <label class="inline-block mb-2">Email</label>
-                <vee-field 
+                <vee-field
                     type="email" name="email"
                     class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
                     placeholder="Enter Email"
@@ -42,14 +42,14 @@
                     >Password</label
                 >
                     <vee-field name="password" :bails="false" v-slot="{ field, errors }">
-                        <input class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none 
+                        <input class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none
                         focus:border-black rounded" type="password"
                         placeholder="Password" v-bind="field"  />
-                        <div class="text-red-600" v-for="error in errors" :key="error">  
-                            {{ error }}   
+                        <div class="text-red-600" v-for="error in errors" :key="error">
+                            {{ error }}
                         </div>
-                    </vee-field>    
-                    
+                    </vee-field>
+
             </div>
             <!-- Confirm Password -->
             <div class="mb-3">
@@ -82,9 +82,10 @@
                     type="checkbox" name="tos" value="1"
                     class="w-4 h-4 float-left -ml-6 mt-1 rounded"
                 />
-                <label class="inline-block"
-                    >Accept terms of service</label
-                >
+                <i18n-t keypath="register.accept" tag="lavel"
+                class="inline-block">
+                  <a href="#">{{ $t('register.TOS') }}</a>
+                  </i18n-t>
                 <ErrorMessage class="text-red-600" name="tos"/>
             </div>
             <button
@@ -94,59 +95,57 @@
             >
                 Submit
             </button>
-            
+
         </vee-form>
     </div>
 </template>
 
 <script>
 export default {
-    name: "RegisterForm",
-    data() {
-        return {
-            tab: 'login',
-            schema: {
-                name: 'required|min:3|max:100|alpha_spaces',
-                email: 'required|min:3|max:100|email',
-                age: 'min_value:18|max_value:120',
-                password: 'required|min:5|max:120|alpha_spaces',
-                confirm_password: 'passwords_mismatched:@password',
-                country: 'required|country_excluded:Test',
-                tos: 'tos_agree',
-            },
-            userData: {
-                country: "USA",
-            },
-            reg_in_submission: false,
-            reg_show_alert: false,
-            reg_alert_variant: 'bg-blue-500',
-            reg_alert_msg: 'Please wait! Your account is being created.',
-        }
+  name: 'RegisterForm',
+  data() {
+    return {
+      tab: 'login',
+      schema: {
+        name: 'required|min:3|max:100|alpha_spaces',
+        email: 'required|min:3|max:100|email',
+        age: 'min_value:18|max_value:120',
+        password: 'required|min:5|max:120|alpha_spaces',
+        confirm_password: 'passwords_mismatched:@password',
+        country: 'required|country_excluded:Test',
+        tos: 'tos_agree',
+      },
+      userData: {
+        country: 'USA',
+      },
+      reg_in_submission: false,
+      reg_show_alert: false,
+      reg_alert_variant: 'bg-blue-500',
+      reg_alert_msg: 'Please wait! Your account is being created.',
+    };
+  },
+  methods: {
+    async register(values) {
+      this.reg_show_alert = true;
+      this.reg_in_submission = true;
+      this.reg_alert_variant = 'bg-blue-500';
+      this.reg_alert_msg = 'Pleaase wait! Your account is being created.';
+
+      try {
+        await this.$store.dispatch('register', values);
+      } catch (error) {
+        this.reg_in_submission = false;
+        this.reg_alert_variant = 'bg-red-500';
+        this.reg_alert_msg = 'An unexpected error occured. Please try again later.';
+        return;
+      }
+
+      this.$store.commit('toggleAuth');
+      this.reg_alert_variant = 'bg-green-500';
+      this.reg_alert_msg = 'Success! Your account has been created.';
+
+      window.location.reload();
     },
-    methods: {
-        async register(values) {
-            this.reg_show_alert = true;
-            this.reg_in_submission = true;
-            this.reg_alert_variant = "bg-blue-500";
-            this.reg_alert_msg = "Pleaase wait! Your account is being created."
-
-            try {
-                await this.$store.dispatch('register', values);
-            } catch (error) {
-                this.reg_in_submission = false;
-                this.reg_alert_variant = 'bg-red-500';
-                this.reg_alert_msg = 'An unexpected error occured. Please try again later.';
-                return;
-            }
-
-            this.$store.commit('toggleAuth');
-            this.reg_alert_variant= "bg-green-500";
-            this.reg_alert_msg="Success! Your account has been created.";
-
-            window.location.reload();
-        },
-    }
-}
+  },
+};
 </script>
-
-

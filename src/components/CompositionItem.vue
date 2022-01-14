@@ -33,7 +33,7 @@
                     <vee-field type="text" name="genre"
                         class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300
                         transition duration-500 focus:outline-none focus:border-black rounded"
-                        :value="song.genre" 
+                        :value="song.genre"
                         @input="updateUnsavedFlag(true)"
                         />
                     <ErrorMessage class="text-red-600" name="genre" />
@@ -52,78 +52,77 @@
 </template>
 
 <script>
-import {songsCollection, storage}  from '@/includes/firebase';
+import { songsCollection, storage } from '@/includes/firebase';
 
 export default {
-    name: 'CompositionItem',
-    props: {
-        song: {
-            type: Object,
-            required: true,
-        },
-        updateSong: {
-            type: Function,
-            required: true,
-        },
-        index: {
-            type: Number,
-            required: true,
-        },
-        removeSong: {
-            type: Function,
-            required: true,
-        },
-        updateUnsavedFlag: {
-            type: Function,
-        }
+  name: 'CompositionItem',
+  props: {
+    song: {
+      type: Object,
+      required: true,
     },
-    data() {
-        return {
-            showForm: false,
-            schema: {
-                modified_name: 'required',
-                genre: 'alpha_spaces',
-            },
-            in_submission: false,
-            show_alert: false,
-            alert_variant: 'bg-blue-500',
-            alert_message: 'Please wait! Updating song info.'
-        }
+    updateSong: {
+      type: Function,
+      required: true,
     },
-    methods: {
-        async edit(values) {
-            this.in_submission = true;
-            this.show_alert = true;
-            this.alert_variant = 'bg-blue-500';
-            this.alert_message = 'Please wait! Updating song info.';
+    index: {
+      type: Number,
+      required: true,
+    },
+    removeSong: {
+      type: Function,
+      required: true,
+    },
+    updateUnsavedFlag: {
+      type: Function,
+    },
+  },
+  data() {
+    return {
+      showForm: false,
+      schema: {
+        modified_name: 'required',
+        genre: 'alpha_spaces',
+      },
+      in_submission: false,
+      show_alert: false,
+      alert_variant: 'bg-blue-500',
+      alert_message: 'Please wait! Updating song info.',
+    };
+  },
+  methods: {
+    async edit(values) {
+      this.in_submission = true;
+      this.show_alert = true;
+      this.alert_variant = 'bg-blue-500';
+      this.alert_message = 'Please wait! Updating song info.';
 
-            try {
-                await songsCollection.doc(this.song.docID).update(values);
-            } catch (error) {
-                this.in_submission = 'bg-red-500';
-                this.alert_message = 'Something went wrong. Please try again later.'
-                return;
-            }
-            
-            this.updateSong(this.index, values);
-            this.updateUnsavedFlag(false);
+      try {
+        await songsCollection.doc(this.song.docID).update(values);
+      } catch (error) {
+        this.in_submission = 'bg-red-500';
+        this.alert_message = 'Something went wrong. Please try again later.';
+        return;
+      }
 
-            this.in_submission = false;
-            this.alert_variant = 'bg-green-500';
-            this.alert_message = 'Success!';
-        },
-        async deleteSong() {
-            const storageRef = storage.ref();
-            const songRef = storageRef.child(`songs/${this.song.original_name}`);
+      this.updateSong(this.index, values);
+      this.updateUnsavedFlag(false);
 
-            await songRef.delete();
+      this.in_submission = false;
+      this.alert_variant = 'bg-green-500';
+      this.alert_message = 'Success!';
+    },
+    async deleteSong() {
+      const storageRef = storage.ref();
+      const songRef = storageRef.child(`songs/${this.song.original_name}`);
 
-            await songsCollection.doc(this.song.docID).delete();;
+      await songRef.delete();
 
-            this.removeSong(this.index);
+      await songsCollection.doc(this.song.docID).delete();
 
-        }
-    }
-}
+      this.removeSong(this.index);
+    },
+  },
+};
 
 </script>
