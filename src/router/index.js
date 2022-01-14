@@ -5,6 +5,8 @@ import Manage from '@/views/Manage.vue';
 import Song from '@/views/Song.vue';
 import store from '@/store';
 
+const path = process.env.NODE_ENV === 'production' ? '' : '/';
+
 const routes = [
   {
     name: 'home',
@@ -33,7 +35,8 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+  mode: 'history',
+  history: createWebHistory(path),
   routes,
   linkExactActiveClass: 'text-yellow-500',
 });

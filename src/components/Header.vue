@@ -36,7 +36,7 @@
                 <ul class="flex flex-row mt-1 ml-auto">
                   <li>
                     <a class="px-2 text-white" href="#" @click.prevent="changeLocale">
-                      {{ $t('header.displaying')}}: {{ currentLocale }}
+                      {{ currentLocale }}
                     </a>
                   </li>
                 </ul>
@@ -53,7 +53,6 @@ export default {
   computed: {
     ...mapState(['userLoggedIn']),
     currentLocale() {
-      console.log('CHANGING');
       return this.$i18n.locale === 'fr' ? 'French' : 'English';
     },
   },

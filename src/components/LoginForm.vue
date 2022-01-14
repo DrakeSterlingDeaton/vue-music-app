@@ -83,7 +83,7 @@ export default {
       // this.$store.commit('toggleAuth');
       this.login_alert_variant = 'bg-green-500';
       this.login_alert_msg = 'success! You are now logged in.';
-      window.location.reload();
+      window.reload();
     },
   },
 };
