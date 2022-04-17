@@ -19,7 +19,7 @@ auth.onAuthStateChanged(() => {
     app.use(router);
     app.use(VeeValidatePLugin);
     app.directive('icon', Icon);
-
+    console.log('app loaded');
     app.mount('#app');
   }
 });
